@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Graduation Cap / Learning Book Motif -->
+    <!-- Cap top diamond -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,32 L82,44 L54,56 L26,44 Z" />
+    <!-- Tassel -->
+    <path
+        android:fillColor="#FBBF24"
+        android:pathData="M76,46 L76,62 C76,64 78,66 80,66 C82,66 84,64 84,62 L84,49 Z" />
+    <!-- Cap skull cap base -->
+    <path
+        android:fillColor="#E0E7FF"
+        android:pathData="M38,50 L38,62 C38,68 45,73 54,73 C63,73 70,68 70,62 L70,50 L54,57 Z" />
+    <!-- Open Book Pages underneath -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M32,74 C38,72 46,73 53,77 L53,88 C46,84 38,83 32,85 Z" />
+    <path
+        android:fillColor="#E0E7FF"
+        android:pathData="M76,74 C70,72 62,73 55,77 L55,88 C62,84 70,83 76,85 Z" />
+</vector>

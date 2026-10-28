@@ -1,0 +1,144 @@
+<resources>
+    <string name="app_name">AprendeApp</string>
+    <string name="welcome_message">¡Bienvenido a AprendeApp!</string>
+    <string name="app_subtitle">Sistema de Recursos para Ingeniería de Sistemas</string>
+    <string name="app_university">Universidad Don Bosco • DSM</string>
+
+    <!-- Auth Strings -->
+    <string name="login_title">Iniciar Sesión</string>
+    <string name="login_subtitle">Accede a tu biblioteca de recursos</string>
+    <string name="register_title">Crear Cuenta</string>
+    <string name="register_subtitle">Regístrate para aprender o compartir</string>
+    <string name="email_label">Correo Institucional</string>
+    <string name="email_placeholder">ejemplo@udb.edu.sv</string>
+    <string name="name_label">Nombre Completo</string>
+    <string name="name_placeholder">Juan Pérez</string>
+    <string name="password_label">Contraseña</string>
+    <string name="password_placeholder">Mínimo 12 caracteres y requisitos</string>
+    <string name="confirm_password_label">Confirmar Contraseña</string>
+    <string name="confirm_password_placeholder">Repite la contraseña</string>
+    <string name="role_label">Rol del Usuario</string>
+    <string name="role_student">Estudiante</string>
+    <string name="role_teacher">Docente</string>
+    <string name="student_role_desc">Acceso para consultar, calificar y guardar favoritos</string>
+    <string name="teacher_role_desc">Acceso completo: gestión CRUD de recursos en la API</string>
+    <string name="btn_login">Ingresar</string>
+    <string name="btn_register">Registrarse</string>
+    <string name="btn_logout">Cerrar Sesión</string>
+    <string name="no_account_prompt">¿No tienes cuenta? Regístrate aquí</string>
+    <string name="already_have_account_prompt">¿Ya tienes cuenta? Inicia sesión</string>
+    <string name="demo_student_btn">Acceso Rápido: Estudiante</string>
+    <string name="demo_teacher_btn">Acceso Rápido: Docente</string>
+
+    <!-- Password Requirements Strings -->
+    <string name="pwd_req_title">Requisitos de contraseña segura:</string>
+    <string name="pwd_req_length">Mínimo 12 caracteres</string>
+    <string name="pwd_req_upper">Al menos una letra mayúscula (A-Z)</string>
+    <string name="pwd_req_lower">Al menos una letra minúscula (a-z)</string>
+    <string name="pwd_req_number">Al menos un número (0-9)</string>
+    <string name="pwd_req_special">Al menos un carácter especial (!@#$%^&amp;*)</string>
+    <string name="pwd_req_match">Las contraseñas coinciden</string>
+
+    <!-- Navigation Tabs -->
+    <string name="nav_resources">Recursos</string>
+    <string name="nav_favorites">Favoritos</string>
+    <string name="nav_manage">Gestión CRUD</string>
+    <string name="nav_profile">Mi Perfil</string>
+
+    <!-- Resource Types -->
+    <string name="type_all">Todos</string>
+    <string name="type_book">Libro</string>
+    <string name="type_video">Video</string>
+    <string name="type_article">Artículo</string>
+    <string name="type_tutorial">Tutorial</string>
+
+    <!-- Search & Filter Strings -->
+    <string name="search_placeholder">Buscar por ID, título o tipo…</string>
+    <string name="sort_by">Ordenar por</string>
+    <string name="sort_title_asc">Título (A-Z)</string>
+    <string name="sort_title_desc">Título (Z-A)</string>
+    <string name="sort_rating_desc">Mejor Calificados</string>
+    <string name="sort_id_desc">Más Recientes (ID)</string>
+    <string name="filter_by_type">Filtrar por tipo</string>
+    <string name="clear_search">Limpiar búsqueda</string>
+    <string name="no_resources_found">No se encontraron recursos</string>
+    <string name="no_resources_hint">Intenta ajustar los filtros o el texto de búsqueda.</string>
+    <string name="no_favorites_yet">Aún no tienes favoritos</string>
+    <string name="no_favorites_hint">Toca el ícono de corazón en cualquier tarjeta para guardarlo aquí.</string>
+
+    <!-- Resource Details & Interaction -->
+    <string name="resource_id_prefix">ID: #</string>
+    <string name="resource_type_prefix">Tipo: </string>
+    <string name="open_resource">Abrir Recurso</string>
+    <string name="share_resource">Compartir</string>
+    <string name="favorite_added">Agregado a tus favoritos</string>
+    <string name="favorite_removed">Eliminado de favoritos</string>
+    <string name="rating_title">Calificar Recurso</string>
+    <string name="rating_hint">Selecciona de 1 a 5 estrellas para calificar:</string>
+    <string name="rating_success">¡Calificación enviada a la API!</string>
+    <string name="btn_submit_rating">Enviar Calificación</string>
+    <string name="rating_average_label">Promedio: %1$.1f (%2$d votos)</string>
+    <string name="no_ratings_yet">Sin calificaciones aún</string>
+
+    <!-- Teacher CRUD Management Strings -->
+    <string name="crud_screen_title">Gestión de Recursos (Docente)</string>
+    <string name="crud_screen_subtitle">Crear, actualizar y eliminar recursos en la API</string>
+    <string name="btn_add_resource">Agregar Nuevo Recurso</string>
+    <string name="edit_resource_title">Modificar Recurso</string>
+    <string name="add_resource_title">Agregar Recurso</string>
+    <string name="field_title_label">Título del Recurso</string>
+    <string name="field_title_placeholder">Ej. Arquitectura Limpia en Android</string>
+    <string name="field_description_label">Descripción Detallada</string>
+    <string name="field_description_placeholder">Descripción clara del contenido educativo…</string>
+    <string name="field_type_label">Tipo de Recurso</string>
+    <string name="field_url_label">Enlace / URL de Acceso</string>
+    <string name="field_url_placeholder">https://…</string>
+    <string name="field_image_label">URL de Imagen Ilustrativa</string>
+    <string name="field_image_placeholder">https://images.unsplash.com/…</string>
+    <string name="btn_save">Guardar en API</string>
+    <string name="btn_update">Actualizar Recurso</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="btn_delete">Eliminar</string>
+    <string name="btn_edit">Editar</string>
+
+    <!-- Delete Confirmation Dialog -->
+    <string name="delete_dialog_title">¿Eliminar recurso?</string>
+    <string name="delete_dialog_message">¿Estás seguro de que deseas eliminar permanentemente \"%1$s\" (ID: %2$s) de la API? Esta acción enviará una petición DELETE al servidor.</string>
+    <string name="delete_confirm_action">Sí, eliminar</string>
+
+    <!-- Feedback & Status Messages -->
+    <string name="msg_loading">Cargando datos desde la API…</string>
+    <string name="msg_creating">Guardando recurso en el servidor…</string>
+    <string name="msg_updating">Actualizando recurso en la API…</string>
+    <string name="msg_deleting">Eliminando recurso…</string>
+    <string name="msg_created_success">Recurso creado exitosamente (POST)</string>
+    <string name="msg_updated_success">Recurso actualizado exitosamente (PUT)</string>
+    <string name="msg_deleted_success">Recurso eliminado exitosamente (DELETE)</string>
+    <string name="msg_error_required_fields">Por favor completa todos los campos requeridos.</string>
+    <string name="msg_error_invalid_url">Por favor ingresa una URL válida (http:// o https://).</string>
+    <string name="msg_error_api">Error al comunicarse con la API: %1$s</string>
+    <string name="msg_sync_offline">Mostrando datos locales sincronizados.</string>
+
+    <!-- API Config & Settings -->
+    <string name="api_settings_title">Configuración de API Externa</string>
+    <string name="api_url_label">URL Base de MockAPI / Railway</string>
+    <string name="api_url_hint">https://xxxx.mockapi.io/api/v1/recursos</string>
+    <string name="btn_test_api">Probar Conexión</string>
+    <string name="btn_reset_api">Restaurar URL por Defecto</string>
+    <string name="api_test_success">¡Conexión exitosa con la API!</string>
+    <string name="api_test_failed">No se pudo conectar a la URL. Verifícala.</string>
+    <string name="api_info_note">Puedes cambiar el endpoint para evaluar con tu propio proyecto de MockAPI.io o Railway.</string>
+
+    <!-- Profile & User Details -->
+    <string name="profile_title">Perfil de Usuario</string>
+    <string name="role_badge_prefix">Rol: </string>
+    <string name="active_session">Sesión Activa</string>
+    <string name="student_perms_summary">Permisos: Consulta, búsqueda, favoritos y calificación de recursos.</string>
+    <string name="teacher_perms_summary">Permisos: Privilegios de Docente con operaciones CRUD (POST, PUT, DELETE).</string>
+
+    <!-- Architecture & Info Dialog -->
+    <string name="info_dialog_title">Acerca de AprendeApp</string>
+    <string name="info_dialog_body">Desarrollado para el Tercer Desafío Práctico DSM en Universidad Don Bosco.\n\n• Arquitectura: MVC / MVVM con Kotlin y Jetpack Compose.\n• Consumo de API REST con Retrofit + OkHttp.\n• Autenticación con roles (Estudiante y Docente).\n• Validación robusta de contraseñas de 12+ caracteres.\n• Persistencia local de Favoritos con Room Database.\n• Sistema de calificación dinámico (1 a 5 estrellas) sincronizado con el backend.</string>
+    <string name="btn_close">Cerrar</string>
+    <string name="btn_retry">Reintentar</string>
+</resources>

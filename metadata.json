@@ -1,0 +1,6 @@
+{
+  "name": "AprendeApp",
+  "description": "Sistema de Gestión de Recursos de Aprendizaje con soporte CRUD, API dinámica REST, autenticación con roles (Estudiante/Docente), favoritos y calificaciones.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
