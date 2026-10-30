@@ -122,7 +122,7 @@
     <!-- API Config & Settings -->
     <string name="api_settings_title">Configuración de API Externa</string>
     <string name="api_url_label">URL Base de MockAPI / Railway</string>
-    <string name="api_url_hint">https://xxxx.mockapi.io/api/v1/recursos</string>
+    <string name="api_url_hint">https://xxxx.mockapi.io/api/</string>
     <string name="btn_test_api">Probar Conexión</string>
     <string name="btn_reset_api">Restaurar URL por Defecto</string>
     <string name="api_test_success">¡Conexión exitosa con la API!</string>
