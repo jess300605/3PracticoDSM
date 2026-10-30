@@ -1,10 +1,14 @@
 package com.example.data.repository
 
+import com.example.data.model.LocalizedException
+import com.example.R
 import android.content.Context
 import android.util.Log
 import com.example.data.local.FavoriteDao
 import com.example.data.local.FavoriteEntity
 import com.example.data.local.ResourceDao
+import com.example.data.local.RatingDao
+import com.example.data.local.RatingEntity
 import com.example.data.local.ResourceEntity
 import com.example.data.model.ResourceItem
 import com.example.data.remote.ApiClient
@@ -20,7 +24,8 @@ import java.io.IOException
 class ResourceRepository(
     private val context: Context,
     private val resourceDao: ResourceDao,
-    private val favoriteDao: FavoriteDao
+    private val favoriteDao: FavoriteDao,
+    private val ratingDao: RatingDao
 ) {
     private val TAG = "ResourceRepository"
     private val prefs = context.getSharedPreferences("aprende_settings", Context.MODE_PRIVATE)
@@ -60,124 +65,124 @@ class ResourceRepository(
     }
 
     suspend fun loadResources(forceRefresh: Boolean = false): Result<List<ResourceItem>> = withContext(Dispatchers.IO) {
-        // First check local Room cache
+        // Muestra primero la caché local (solo lectura) mientras llega la API
         val localItems = resourceDao.getAllResources().map { it.toDomain() }
         if (localItems.isNotEmpty() && !forceRefresh) {
             _resources.value = localItems
         }
 
-        // Try to fetch from remote API
         try {
-            val service = ApiClient.getService(_apiUrl.value)
-            val response = service.getResources()
-
+            val response = ApiClient.getService(_apiUrl.value).getResources()
             if (response.isSuccessful && response.body() != null) {
-                val dtoList = response.body()!!
-                val domainList = dtoList.map { it.toDomain() }
-
-                if (domainList.isNotEmpty()) {
-                    resourceDao.insertResources(domainList.map { ResourceEntity.fromDomain(it) })
-                    _resources.value = domainList
-                    _isOfflineMode.value = false
-                    return@withContext Result.success(domainList)
-                } else if (localItems.isEmpty()) {
-                    // Seed initial data if remote is empty
-                    val seeded = seedInitialData()
-                    _resources.value = seeded
-                    _isOfflineMode.value = false
-                    return@withContext Result.success(seeded)
+                var remoteList = response.body()!!.map { it.toDomain() }
+                if (remoteList.isEmpty()) {
+                    // La API está vacía: se cargan los recursos iniciales EN la API (POST)
+                    remoteList = seedRemoteData()
                 }
+                // La API es la fuente de verdad: la caché se reemplaza por completo
+                resourceDao.clearAll()
+                resourceDao.insertResources(remoteList.map { ResourceEntity.fromDomain(it) })
+                _resources.value = remoteList
+                _isOfflineMode.value = false
+                Result.success(remoteList)
             } else {
                 Log.w(TAG, "API responded with error code: ${response.code()}")
+                _isOfflineMode.value = true
+                _resources.value = localItems
+                Result.failure(IOException("HTTP ${response.code()}"))
             }
         } catch (e: Exception) {
-            Log.w(TAG, "Remote fetch failed, falling back to local database: ${e.message}")
+            Log.w(TAG, "Remote fetch failed, using local cache: ${e.message}")
             _isOfflineMode.value = true
-        }
-
-        // Fallback to local cache or seed if completely empty
-        val updatedLocal = resourceDao.getAllResources().map { it.toDomain() }
-        if (updatedLocal.isEmpty()) {
-            val seeded = seedInitialData()
-            _resources.value = seeded
-            Result.success(seeded)
-        } else {
-            _resources.value = updatedLocal
-            Result.success(updatedLocal)
+            _resources.value = localItems
+            Result.failure(e)
         }
     }
 
     suspend fun addResource(item: ResourceItem): Result<ResourceItem> = withContext(Dispatchers.IO) {
         try {
-            val service = ApiClient.getService(_apiUrl.value)
-            val dto = ResourceDto.fromDomain(item)
-            val response = service.createResource(dto)
-
-            val created = if (response.isSuccessful && response.body() != null) {
-                response.body()!!.toDomain()
-            } else {
-                // If API fails or offline, generate local ID
-                item.copy(id = if (item.id.isEmpty()) System.currentTimeMillis().toString() else item.id)
+            val response = ApiClient.getService(_apiUrl.value).createResource(ResourceDto.fromDomain(item))
+            val body = response.body()
+            if (!response.isSuccessful || body == null) {
+                return@withContext Result.failure(IOException("HTTP ${response.code()}"))
             }
-
+            val created = body.toDomain()
             resourceDao.insertResource(ResourceEntity.fromDomain(created))
             _resources.value = listOf(created) + _resources.value.filter { it.id != created.id }
             Result.success(created)
         } catch (e: Exception) {
-            Log.w(TAG, "Add remote failed, saving locally: ${e.message}")
-            val fallbackItem = item.copy(id = if (item.id.isEmpty()) System.currentTimeMillis().toString() else item.id)
-            resourceDao.insertResource(ResourceEntity.fromDomain(fallbackItem))
-            _resources.value = listOf(fallbackItem) + _resources.value.filter { it.id != fallbackItem.id }
-            Result.success(fallbackItem)
+            Log.w(TAG, "POST failed: ${e.message}")
+            Result.failure(e)
         }
     }
 
     suspend fun updateResource(item: ResourceItem): Result<ResourceItem> = withContext(Dispatchers.IO) {
         try {
-            val service = ApiClient.getService(_apiUrl.value)
-            val dto = ResourceDto.fromDomain(item)
-            val response = service.updateResource(item.id, dto)
-
-            val updated = if (response.isSuccessful && response.body() != null) {
-                response.body()!!.toDomain()
-            } else {
-                item
+            val response = ApiClient.getService(_apiUrl.value).updateResource(item.id, ResourceDto.fromDomain(item))
+            val body = response.body()
+            if (!response.isSuccessful || body == null) {
+                return@withContext Result.failure(IOException("HTTP ${response.code()}"))
             }
-
+            val updated = body.toDomain()
             resourceDao.insertResource(ResourceEntity.fromDomain(updated))
             _resources.value = _resources.value.map { if (it.id == updated.id) updated else it }
             Result.success(updated)
         } catch (e: Exception) {
-            Log.w(TAG, "Update remote failed, updating locally: ${e.message}")
-            resourceDao.insertResource(ResourceEntity.fromDomain(item))
-            _resources.value = _resources.value.map { if (it.id == item.id) item else it }
-            Result.success(item)
+            Log.w(TAG, "PUT failed: ${e.message}")
+            Result.failure(e)
         }
     }
 
     suspend fun deleteResource(id: String): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
-            val service = ApiClient.getService(_apiUrl.value)
-            service.deleteResource(id)
+            val response = ApiClient.getService(_apiUrl.value).deleteResource(id)
+            // 404 = ya no existe en el servidor; se limpia igualmente en local
+            if (!response.isSuccessful && response.code() != 404) {
+                return@withContext Result.failure(IOException("HTTP ${response.code()}"))
+            }
+            resourceDao.deleteResourceById(id)
+            _resources.value = _resources.value.filter { it.id != id }
+            Result.success(true)
         } catch (e: Exception) {
-            Log.w(TAG, "Delete remote failed, proceeding to delete locally: ${e.message}")
+            Log.w(TAG, "DELETE failed: ${e.message}")
+            Result.failure(e)
         }
-
-        resourceDao.deleteResourceById(id)
-        _resources.value = _resources.value.filter { it.id != id }
-        Result.success(true)
     }
 
-    suspend fun rateResource(id: String, newRating: Int): Result<ResourceItem> = withContext(Dispatchers.IO) {
+    /**
+     * Un voto por usuario y recurso. Si el usuario ya había votado, su voto anterior se
+     * reemplaza (el total de votos no cambia); si no, se suma un voto nuevo.
+     * El nuevo promedio se envía a la API con PUT y solo se guarda el voto si la API respondió bien.
+     */
+    suspend fun rateResource(userId: String, id: String, newRating: Int): Result<ResourceItem> = withContext(Dispatchers.IO) {
         val current = _resources.value.find { it.id == id }
             ?: resourceDao.getResourceById(id)?.toDomain()
-            ?: return@withContext Result.failure(IllegalArgumentException("Recurso no encontrado."))
+            ?: return@withContext Result.failure(LocalizedException(R.string.err_resource_not_found))
 
-        val newTotalVotos = current.totalVotos + 1
-        val newCalificacion = ((current.calificacion * current.totalVotos) + newRating) / newTotalVotos
-        val updated = current.copy(calificacion = newCalificacion, totalVotos = newTotalVotos)
+        val previous = ratingDao.getRating(userId, id)
+        val updated = if (previous == null) {
+            val votes = current.totalVotos + 1
+            current.copy(
+                calificacion = ((current.calificacion * current.totalVotos) + newRating) / votes,
+                totalVotos = votes
+            )
+        } else {
+            val votes = current.totalVotos.coerceAtLeast(1)
+            current.copy(
+                calificacion = ((current.calificacion * votes) - previous.stars + newRating) / votes,
+                totalVotos = votes
+            )
+        }
 
-        updateResource(updated)
+        val result = updateResource(updated)
+        if (result.isSuccess) {
+            ratingDao.upsertRating(RatingEntity(userId = userId, resourceId = id, stars = newRating))
+        }
+        result
+    }
+
+    suspend fun getUserRating(userId: String, resourceId: String): Int? = withContext(Dispatchers.IO) {
+        ratingDao.getRating(userId, resourceId)?.stars
     }
 
     // Favorite management
@@ -195,7 +200,7 @@ class ResourceRepository(
         }
     }
 
-    private suspend fun seedInitialData(): List<ResourceItem> {
+    private suspend fun seedRemoteData(): List<ResourceItem> {
         val defaultItems = listOf(
             ResourceItem(
                 id = "1",
@@ -259,7 +264,13 @@ class ResourceRepository(
             )
         )
 
-        resourceDao.insertResources(defaultItems.map { ResourceEntity.fromDomain(it) })
-        return defaultItems
+        val service = ApiClient.getService(_apiUrl.value)
+        val created = mutableListOf<ResourceItem>()
+        for (item in defaultItems) {
+            // El id lo asigna la API; no se envía el id local
+            val response = service.createResource(ResourceDto.fromDomain(item.copy(id = "")))
+            response.body()?.let { created.add(it.toDomain()) }
+        }
+        return created
     }
 }
