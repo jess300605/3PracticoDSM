@@ -141,4 +141,78 @@
     <string name="info_dialog_body">Desarrollado para el Tercer Desafío Práctico DSM en Universidad Don Bosco.\n\n• Arquitectura: MVC / MVVM con Kotlin y Jetpack Compose.\n• Consumo de API REST con Retrofit + OkHttp.\n• Autenticación con roles (Estudiante y Docente).\n• Validación robusta de contraseñas de 12+ caracteres.\n• Persistencia local de Favoritos con Room Database.\n• Sistema de calificación dinámico (1 a 5 estrellas) sincronizado con el backend.</string>
     <string name="btn_close">Cerrar</string>
     <string name="btn_retry">Reintentar</string>
+
+    <!-- Content descriptions (accesibilidad) -->
+    <string name="cd_rating">Calificación</string>
+    <string name="cd_fulfilled">Cumplido</string>
+    <string name="cd_pending">Pendiente</string>
+    <string name="cd_stars">%1$d estrellas</string>
+    <string name="cd_refresh">Refrescar</string>
+    <string name="cd_hide_password">Ocultar</string>
+    <string name="cd_show_password">Mostrar</string>
+    <string name="cd_info">Información</string>
+    <string name="cd_back">Regresar</string>
+    <string name="cd_clear">Limpiar</string>
+    <string name="cd_edit_resource">Editar recurso en API</string>
+    <string name="cd_delete_resource">Eliminar recurso en API</string>
+
+    <!-- Tarjeta de recurso -->
+    <string name="btn_rate">Calificar</string>
+    <string name="rating_na">N/A</string>
+    <string name="rating_selected">%1$d de 5 estrellas</string>
+    <string name="share_text_template">%1$s\n%2$s\nEnlace: %3$s</string>
+    <string name="share_chooser_title">Compartir recurso</string>
+
+    <!-- Login -->
+    <string name="demo_divider">O ACCESO DEMO RÁPIDO</string>
+
+    <!-- Perfil -->
+    <string name="default_user_name">Usuario</string>
+    <string name="default_user_email">correo@udb.edu.sv</string>
+    <string name="profile_role_privileges">Privilegios del Rol</string>
+    <string name="profile_api_section">Conexión a API REST</string>
+    <string name="profile_current_endpoint">Endpoint actual:</string>
+    <string name="btn_configure_api">Configurar MockAPI / Railway</string>
+    <string name="profile_challenge_title">Desafío Práctico DSM</string>
+    <string name="profile_university_line">Universidad Don Bosco • Escuela de Ingeniería en Computación</string>
+    <string name="btn_view_specs">Ver Especificaciones Técnicas</string>
+
+    <!-- Favoritos -->
+    <string name="favorites_title">Mis Recursos Favoritos</string>
+    <string name="favorites_count">%1$d recursos guardados en tu dispositivo</string>
+
+    <!-- Pantalla Docente -->
+    <string name="crud_restricted_title">Acceso Exclusivo para Docentes</string>
+    <string name="crud_restricted_body">Esta pantalla contiene las operaciones avanzadas de gestión CRUD (POST, PUT, DELETE) contra la API externa según los requerimientos del desafío.</string>
+    <string name="crud_new_resource">Nuevo Recurso</string>
+    <string name="crud_verbs_badge">POST • PUT • DELETE</string>
+    <string name="crud_search_placeholder">Buscar recurso para editar/eliminar…</string>
+    <string name="form_error_required">Por favor completa título, descripción y enlace.</string>
+
+    <!-- API: resultado corto de la prueba de conexión -->
+    <string name="api_test_ok_short">¡Conexión OK!</string>
+    <string name="api_test_fail_short">Fallo conexión</string>
+
+    <!-- Mensajes de error (autenticación y datos) -->
+    <string name="err_name_empty">El nombre no puede estar vacío.</string>
+    <string name="err_email_invalid">El formato del correo es inválido.</string>
+    <string name="err_password_weak">La contraseña no cumple con todos los requisitos de seguridad.</string>
+    <string name="err_email_exists">Ya existe una cuenta registrada con este correo.</string>
+    <string name="err_user_not_found">Usuario no encontrado con ese correo.</string>
+    <string name="err_wrong_password">Contraseña incorrecta.</string>
+    <string name="err_resource_not_found">Recurso no encontrado.</string>
+
+    <!-- Snackbars -->
+    <string name="snack_load_error">Error al conectar con la API. Mostrando datos locales.</string>
+    <string name="snack_login_error_default">Error al iniciar sesión</string>
+    <string name="snack_register_error_default">Error al registrarse</string>
+    <string name="snack_logged_in_as">Ingresaste como %1$s</string>
+    <string name="snack_account_created">¡Cuenta creada exitosamente! Bienvenido.</string>
+    <string name="snack_logged_out">Sesión cerrada</string>
+    <string name="snack_rating_sent">¡Calificación de %1$d estrellas enviada!</string>
+    <string name="snack_rating_error">Error al actualizar la calificación</string>
+    <string name="snack_save_error">No se pudo guardar en la API. Revisa tu conexión e inténtalo de nuevo.</string>
+    <string name="snack_delete_error">No se pudo eliminar en la API. Inténtalo de nuevo.</string>
+    <string name="snack_api_url_updated">URL de API actualizada</string>
+    <string name="snack_api_url_reset">URL de API restaurada a la predeterminada</string>
 </resources>
