@@ -1,5 +1,7 @@
 package com.example.data.repository
 
+import com.example.data.model.LocalizedException
+import com.example.R
 import com.example.data.local.UserDao
 import com.example.data.local.UserEntity
 import com.example.data.model.PasswordValidator
@@ -56,20 +58,20 @@ class AuthRepository(private val userDao: UserDao) {
         val trimmedName = nombre.trim()
 
         if (trimmedName.isEmpty()) {
-            return Result.failure(IllegalArgumentException("El nombre no puede estar vacío."))
+            return Result.failure(LocalizedException(R.string.err_name_empty))
         }
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(trimmedEmail).matches()) {
-            return Result.failure(IllegalArgumentException("El formato del correo es inválido."))
+            return Result.failure(LocalizedException(R.string.err_email_invalid))
         }
 
         val validation = PasswordValidator.validate(password)
         if (!validation.isValid) {
-            return Result.failure(IllegalArgumentException("La contraseña no cumple con todos los requisitos de seguridad."))
+            return Result.failure(LocalizedException(R.string.err_password_weak))
         }
 
         val existing = userDao.getUserByEmail(trimmedEmail)
         if (existing != null) {
-            return Result.failure(IllegalArgumentException("Ya existe una cuenta registrada con este correo."))
+            return Result.failure(LocalizedException(R.string.err_email_exists))
         }
 
         val newUser = User(
@@ -88,11 +90,11 @@ class AuthRepository(private val userDao: UserDao) {
     suspend fun login(email: String, password: String): Result<User> {
         val trimmedEmail = email.trim().lowercase()
         val userEntity = userDao.getUserByEmail(trimmedEmail)
-            ?: return Result.failure(IllegalArgumentException("Usuario no encontrado con ese correo."))
+            ?: return Result.failure(LocalizedException(R.string.err_user_not_found))
 
         val inputHash = hashPassword(password)
         if (userEntity.passwordHash != inputHash) {
-            return Result.failure(IllegalArgumentException("Contraseña incorrecta."))
+            return Result.failure(LocalizedException(R.string.err_wrong_password))
         }
 
         val user = userEntity.toDomain()

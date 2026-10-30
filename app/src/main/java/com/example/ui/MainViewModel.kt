@@ -1,9 +1,12 @@
 package com.example.ui
 
 import android.app.Application
+import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.R
 import com.example.data.local.AppDatabase
+import com.example.data.model.LocalizedException
 import com.example.data.model.PasswordValidationResult
 import com.example.data.model.PasswordValidator
 import com.example.data.model.ResourceItem
@@ -43,7 +46,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = AppDatabase.getInstance(application)
     val authRepository = AuthRepository(db.userDao())
-    val resourceRepository = ResourceRepository(application, db.resourceDao(), db.favoriteDao())
+    val resourceRepository = ResourceRepository(application, db.resourceDao(), db.favoriteDao(), db.ratingDao())
 
     val currentUser: StateFlow<User?> = authRepository.currentUser
     val apiUrl: StateFlow<String> = resourceRepository.apiUrl
@@ -181,6 +184,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _registerPassword.value = password
     }
 
+    /** Obtiene un texto de strings.xml (con argumentos opcionales). */
+    private fun str(@StringRes id: Int, vararg args: Any): String =
+        getApplication<Application>().getString(id, *args)
+
+    /** Convierte un error en texto para el usuario usando strings.xml. */
+    private fun errorText(error: Throwable?, @StringRes fallback: Int): String =
+        if (error is LocalizedException) str(error.messageRes) else str(fallback)
+
     fun showSnackbar(msg: String) {
         _snackbarMessage.value = msg
     }
@@ -195,7 +206,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val result = resourceRepository.loadResources(forceRefresh = true)
             _isLoading.value = false
             if (result.isFailure) {
-                showSnackbar("Error al conectar con la API. Mostrando datos locales.")
+                showSnackbar(str(R.string.snack_load_error))
             }
         }
     }
@@ -209,7 +220,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _currentScreen.value = AppScreen.MAIN
                 onResult(true, null)
             } else {
-                val errorMsg = result.exceptionOrNull()?.message ?: "Error al iniciar sesión"
+                val errorMsg = errorText(result.exceptionOrNull(), R.string.snack_login_error_default)
                 showSnackbar(errorMsg)
                 onResult(false, errorMsg)
             }
@@ -222,7 +233,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             authRepository.loginDemo(role)
             _isLoading.value = false
             _currentScreen.value = AppScreen.MAIN
-            showSnackbar("Ingresaste como ${role.displayName()}")
+            showSnackbar(str(R.string.snack_logged_in_as, str(role.labelRes)))
         }
     }
 
@@ -233,10 +244,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _isLoading.value = false
             if (result.isSuccess) {
                 _currentScreen.value = AppScreen.MAIN
-                showSnackbar("¡Cuenta creada exitosamente! Bienvenido.")
+                showSnackbar(str(R.string.snack_account_created))
                 onResult(true, null)
             } else {
-                val errorMsg = result.exceptionOrNull()?.message ?: "Error al registrarse"
+                val errorMsg = errorText(result.exceptionOrNull(), R.string.snack_register_error_default)
                 showSnackbar(errorMsg)
                 onResult(false, errorMsg)
             }
@@ -247,14 +258,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         authRepository.logout()
         _currentScreen.value = AppScreen.LOGIN
         _currentTab.value = MainTab.RESOURCES
-        showSnackbar("Sesión cerrada")
+        showSnackbar(str(R.string.snack_logged_out))
     }
 
     fun toggleFavorite(resourceId: String) {
         val user = currentUser.value ?: return
         viewModelScope.launch {
             val added = resourceRepository.toggleFavorite(user.id, resourceId)
-            showSnackbar(if (added) "Guardado en Favoritos" else "Eliminado de Favoritos")
+            showSnackbar(str(if (added) R.string.favorite_added else R.string.favorite_removed))
         }
     }
 
@@ -269,14 +280,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun submitRating(item: ResourceItem, rating: Int) {
         viewModelScope.launch {
+            val userId = currentUser.value?.id ?: return@launch
             _isLoading.value = true
-            val res = resourceRepository.rateResource(item.id, rating)
+            val res = resourceRepository.rateResource(userId, item.id, rating)
             _isLoading.value = false
             closeRatingDialog()
             if (res.isSuccess) {
-                showSnackbar("¡Calificación de $rating estrellas enviada!")
+                showSnackbar(str(R.string.snack_rating_sent, rating))
             } else {
-                showSnackbar("Error al actualizar la calificación")
+                showSnackbar(str(R.string.snack_rating_error))
             }
         }
     }
@@ -304,11 +316,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 resourceRepository.addResource(item)
             }
             _isLoading.value = false
-            closeEditOrAddDialog()
             if (result.isSuccess) {
-                showSnackbar(if (isEdit) "Recurso actualizado en API (PUT)" else "Recurso creado en API (POST)")
+                // Solo se cierra el formulario si la API aceptó el cambio
+                closeEditOrAddDialog()
+                showSnackbar(str(if (isEdit) R.string.msg_updated_success else R.string.msg_created_success))
             } else {
-                showSnackbar("Error al procesar operación en la API")
+                showSnackbar(str(R.string.snack_save_error))
             }
         }
     }
@@ -328,9 +341,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _isLoading.value = false
             closeDeleteDialog()
             if (result.isSuccess) {
-                showSnackbar("Recurso eliminado de la API (DELETE)")
+                showSnackbar(str(R.string.msg_deleted_success))
             } else {
-                showSnackbar("Error al eliminar recurso")
+                showSnackbar(str(R.string.snack_delete_error))
             }
         }
     }
@@ -356,7 +369,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             resourceRepository.setApiUrl(url)
             closeApiConfig()
-            showSnackbar("URL de API actualizada")
+            showSnackbar(str(R.string.snack_api_url_updated))
         }
     }
 
@@ -364,7 +377,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             resourceRepository.resetApiUrl()
             closeApiConfig()
-            showSnackbar("URL de API restaurada a la predeterminada")
+            showSnackbar(str(R.string.snack_api_url_reset))
         }
     }
 

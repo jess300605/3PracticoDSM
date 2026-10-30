@@ -82,14 +82,14 @@ fun ProfileScreen(
         Spacer(modifier = Modifier.height(14.dp))
 
         Text(
-            text = user?.nombre ?: "Usuario",
+            text = user?.nombre ?: stringResource(R.string.default_user_name),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text = user?.email ?: "correo@udb.edu.sv",
+            text = user?.email ?: stringResource(R.string.default_user_email),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -101,7 +101,7 @@ fun ProfileScreen(
             shape = RoundedCornerShape(12.dp)
         ) {
             Text(
-                text = "${stringResource(R.string.role_badge_prefix)}${user?.role?.displayName() ?: "Estudiante"}",
+                text = "${stringResource(R.string.role_badge_prefix)}${stringResource((user?.role ?: UserRole.ESTUDIANTE).labelRes)}",
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimary,
@@ -128,7 +128,7 @@ fun ProfileScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Privilegios del Rol",
+                        text = stringResource(R.string.profile_role_privileges),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -167,7 +167,7 @@ fun ProfileScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Conexión a API REST",
+                        text = stringResource(R.string.profile_api_section),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -176,7 +176,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Endpoint actual:",
+                    text = stringResource(R.string.profile_current_endpoint),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -196,7 +196,7 @@ fun ProfileScreen(
                         .fillMaxWidth()
                         .testTag("btn_open_api_settings")
                 ) {
-                    Text("Configurar MockAPI / Railway")
+                    Text(stringResource(R.string.btn_configure_api))
                 }
             }
         }
@@ -220,7 +220,7 @@ fun ProfileScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Desafío Práctico DSM",
+                        text = stringResource(R.string.profile_challenge_title),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -229,7 +229,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Universidad Don Bosco • Escuela de Ingeniería en Computación",
+                    text = stringResource(R.string.profile_university_line),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -242,7 +242,7 @@ fun ProfileScreen(
                         .fillMaxWidth()
                         .testTag("btn_about_app")
                 ) {
-                    Text("Ver Especificaciones Técnicas")
+                    Text(stringResource(R.string.btn_view_specs))
                 }
             }
         }

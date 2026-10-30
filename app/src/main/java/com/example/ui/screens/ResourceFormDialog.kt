@@ -61,6 +61,8 @@ fun ResourceFormDialog(
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     val resourceTypes = listOf("Libro", "Video", "Artículo", "Tutorial")
+    val requiredFieldsMsg = stringResource(R.string.form_error_required)
+    val invalidUrlMsg = stringResource(R.string.msg_error_invalid_url)
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -189,11 +191,11 @@ fun ResourceFormDialog(
             Button(
                 onClick = {
                     if (titulo.isBlank() || descripcion.isBlank() || enlace.isBlank()) {
-                        errorMessage = "Por favor completa título, descripción y enlace."
+                        errorMessage = requiredFieldsMsg
                         return@Button
                     }
                     if (!enlace.startsWith("http://") && !enlace.startsWith("https://")) {
-                        errorMessage = "El enlace debe comenzar con http:// o https://"
+                        errorMessage = invalidUrlMsg
                         return@Button
                     }
 

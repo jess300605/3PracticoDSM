@@ -1,5 +1,7 @@
 package com.example.ui.components
 
+import com.example.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,7 +37,7 @@ fun PasswordRequirementRow(
     ) {
         Icon(
             imageVector = if (fulfilled) Icons.Filled.CheckCircle else Icons.Filled.RadioButtonUnchecked,
-            contentDescription = if (fulfilled) "Cumplido" else "Pendiente",
+            contentDescription = if (fulfilled) stringResource(R.string.cd_fulfilled) else stringResource(R.string.cd_pending),
             tint = iconColor,
             modifier = Modifier.size(16.dp)
         )

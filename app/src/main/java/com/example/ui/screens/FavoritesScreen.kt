@@ -53,13 +53,13 @@ fun FavoritesScreen(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "Mis Recursos Favoritos",
+                    text = stringResource(R.string.favorites_title),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
                 Text(
-                    text = "${favoriteResources.size} recursos guardados en tu dispositivo",
+                    text = stringResource(R.string.favorites_count, favoriteResources.size),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
                 )

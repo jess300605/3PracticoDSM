@@ -84,7 +84,7 @@ fun RatingDialog(
                     for (i in 1..5) {
                         Icon(
                             imageVector = if (i <= selectedStars) Icons.Filled.Star else Icons.Filled.StarBorder,
-                            contentDescription = "$i estrellas",
+                            contentDescription = stringResource(R.string.cd_stars, i),
                             tint = if (i <= selectedStars) StarGold else MaterialTheme.colorScheme.outline,
                             modifier = Modifier
                                 .size(44.dp)
@@ -98,7 +98,7 @@ fun RatingDialog(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "$selectedStars de 5 estrellas",
+                    text = stringResource(R.string.rating_selected, selectedStars),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary

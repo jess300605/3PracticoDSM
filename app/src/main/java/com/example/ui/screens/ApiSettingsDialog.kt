@@ -134,7 +134,7 @@ fun ApiSettingsDialog(
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = if (testResult == true) "¡Conexión OK!" else "Fallo conexión",
+                                text = if (testResult == true) stringResource(R.string.api_test_ok_short) else stringResource(R.string.api_test_fail_short),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = if (testResult == true) Color(0xFF16A34A) else MaterialTheme.colorScheme.error
                             )

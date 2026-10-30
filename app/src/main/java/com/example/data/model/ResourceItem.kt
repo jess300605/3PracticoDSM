@@ -11,5 +11,5 @@ data class ResourceItem(
     val totalVotos: Int = 0
 ) {
     val ratingDisplay: String
-        get() = if (totalVotos > 0) String.format("%.1f", calificacion) else "N/A"
+        get() = String.format("%.1f", calificacion)
 }

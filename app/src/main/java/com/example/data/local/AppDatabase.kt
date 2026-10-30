@@ -4,18 +4,33 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
-    entities = [UserEntity::class, FavoriteEntity::class, ResourceEntity::class],
-    version = 1,
+    entities = [UserEntity::class, FavoriteEntity::class, ResourceEntity::class, RatingEntity::class],
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun favoriteDao(): FavoriteDao
     abstract fun resourceDao(): ResourceDao
+    abstract fun ratingDao(): RatingDao
 
     companion object {
+        // Migración 1 -> 2: agrega la tabla de votos sin borrar usuarios ni favoritos
+        private val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `ratings` (" +
+                        "`userId` TEXT NOT NULL, `resourceId` TEXT NOT NULL, " +
+                        "`stars` INTEGER NOT NULL, `ratedAt` INTEGER NOT NULL, " +
+                        "PRIMARY KEY(`userId`, `resourceId`))"
+                )
+            }
+        }
+
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
@@ -26,6 +41,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "aprende_database"
                 )
+                    .addMigrations(MIGRATION_1_2)
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance

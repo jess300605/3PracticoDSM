@@ -1,13 +1,11 @@
 package com.example.data.model
 
-enum class UserRole {
-    ESTUDIANTE,
-    DOCENTE;
+import androidx.annotation.StringRes
+import com.example.R
 
-    fun displayName(): String = when (this) {
-        ESTUDIANTE -> "Estudiante"
-        DOCENTE -> "Docente"
-    }
+enum class UserRole(@StringRes val labelRes: Int) {
+    ESTUDIANTE(R.string.role_student),
+    DOCENTE(R.string.role_teacher)
 }
 
 data class User(

@@ -192,13 +192,13 @@ fun ResourceCard(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Star,
-                        contentDescription = "Rating",
+                        contentDescription = stringResource(R.string.cd_rating),
                         tint = StarGold,
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = item.ratingDisplay,
+                        text = if (item.totalVotos > 0) item.ratingDisplay else stringResource(R.string.rating_na),
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -245,7 +245,7 @@ fun ResourceCard(
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = "Calificar",
+                                text = stringResource(R.string.btn_rate),
                                 style = MaterialTheme.typography.labelMedium
                             )
                         }
@@ -278,11 +278,11 @@ fun ResourceCard(
                                     action = Intent.ACTION_SEND
                                     putExtra(
                                         Intent.EXTRA_TEXT,
-                                        "${item.titulo}\n${item.descripcion}\nEnlace: ${item.enlace}"
+                                        context.getString(R.string.share_text_template, item.titulo, item.descripcion, item.enlace)
                                     )
                                     type = "text/plain"
                                 }
-                                val shareIntent = Intent.createChooser(sendIntent, "Compartir recurso")
+                                val shareIntent = Intent.createChooser(sendIntent, context.getString(R.string.share_chooser_title))
                                 context.startActivity(shareIntent)
                             }
                         ) {

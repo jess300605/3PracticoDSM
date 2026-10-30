@@ -59,3 +59,12 @@ interface ResourceDao {
     @Query("DELETE FROM resources")
     suspend fun clearAll()
 }
+
+@Dao
+interface RatingDao {
+    @Query("SELECT * FROM ratings WHERE userId = :userId AND resourceId = :resourceId LIMIT 1")
+    suspend fun getRating(userId: String, resourceId: String): RatingEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertRating(rating: RatingEntity)
+}

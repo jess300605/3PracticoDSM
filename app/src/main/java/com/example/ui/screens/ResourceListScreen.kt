@@ -194,7 +194,7 @@ fun ResourceListScreen(
             ) {
                 Icon(
                     imageVector = Icons.Filled.Refresh,
-                    contentDescription = "Refrescar",
+                    contentDescription = stringResource(R.string.cd_refresh),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }

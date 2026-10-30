@@ -180,7 +180,7 @@ fun LoginScreen(
                             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                 Icon(
                                     imageVector = if (passwordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
-                                    contentDescription = if (passwordVisible) "Ocultar" else "Mostrar"
+                                    contentDescription = if (passwordVisible) stringResource(R.string.cd_hide_password) else stringResource(R.string.cd_show_password)
                                 )
                             }
                         },
@@ -244,7 +244,7 @@ fun LoginScreen(
                 ) {
                     HorizontalDivider(modifier = Modifier.weight(1f))
                     Text(
-                        text = " O ACCESO DEMO RÁPIDO ",
+                        text = stringResource(R.string.demo_divider),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(horizontal = 8.dp)
@@ -270,7 +270,7 @@ fun LoginScreen(
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("Docente")
+                        Text(stringResource(R.string.role_teacher))
                     }
 
                     OutlinedButton(
@@ -285,7 +285,7 @@ fun LoginScreen(
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("Estudiante")
+                        Text(stringResource(R.string.role_student))
                     }
                 }
             }
@@ -300,7 +300,7 @@ fun LoginScreen(
         ) {
             Icon(
                 imageVector = Icons.Filled.Info,
-                contentDescription = "Información",
+                contentDescription = stringResource(R.string.cd_info),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
