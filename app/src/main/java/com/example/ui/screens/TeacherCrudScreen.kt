@@ -23,7 +23,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Security
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -62,7 +61,6 @@ fun TeacherCrudScreen(
     onAddClick: () -> Unit,
     onEditClick: (ResourceItem) -> Unit,
     onDeleteClick: (ResourceItem) -> Unit,
-    onSwitchToTeacherDemo: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var searchQuery by remember { mutableStateOf("") }
@@ -92,27 +90,18 @@ fun TeacherCrudScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "Acceso Exclusivo para Docentes",
+                        text = stringResource(R.string.crud_restricted_title),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Esta pantalla contiene las operaciones avanzadas de gestión CRUD (POST, PUT, DELETE) contra la API externa según los requerimientos del desafío.",
+                        text = stringResource(R.string.crud_restricted_body),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center
                     )
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Button(
-                        onClick = onSwitchToTeacherDemo,
-                        modifier = Modifier.testTag("btn_switch_to_teacher_role")
-                    ) {
-                        Icon(Icons.Filled.Security, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Cambiar a Rol Docente (Demo)")
-                    }
                 }
             }
         }
@@ -135,7 +124,7 @@ fun TeacherCrudScreen(
             ExtendedFloatingActionButton(
                 onClick = onAddClick,
                 icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-                text = { Text("Nuevo Recurso") },
+                text = { Text(stringResource(R.string.crud_new_resource)) },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.testTag("fab_add_resource")
@@ -179,7 +168,7 @@ fun TeacherCrudScreen(
                             shape = RoundedCornerShape(12.dp)
                         ) {
                             Text(
-                                text = "POST • PUT • DELETE",
+                                text = stringResource(R.string.crud_verbs_badge),
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onPrimary,
@@ -200,12 +189,12 @@ fun TeacherCrudScreen(
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
-                    placeholder = { Text("Buscar recurso para editar/eliminar…") },
+                    placeholder = { Text(stringResource(R.string.crud_search_placeholder)) },
                     leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
                             IconButton(onClick = { searchQuery = "" }) {
-                                Icon(Icons.Filled.Clear, contentDescription = "Limpiar")
+                                Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.cd_clear))
                             }
                         }
                     },
@@ -319,7 +308,7 @@ private fun CrudItemCard(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Edit,
-                        contentDescription = "Editar recurso en API",
+                        contentDescription = stringResource(R.string.cd_edit_resource),
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
@@ -332,7 +321,7 @@ private fun CrudItemCard(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Delete,
-                        contentDescription = "Eliminar recurso en API",
+                        contentDescription = stringResource(R.string.cd_delete_resource),
                         tint = MaterialTheme.colorScheme.error
                     )
                 }

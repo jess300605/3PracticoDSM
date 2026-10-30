@@ -161,7 +161,7 @@ class MainActivity : ComponentActivity() {
                         MainScreenContent(
                             currentTab = currentTab,
                             userRole = currentUser?.role ?: UserRole.ESTUDIANTE,
-                            userName = currentUser?.nombre ?: "Usuario",
+                            userName = currentUser?.nombre ?: stringResource(R.string.default_user_name),
                             isTeacher = isTeacher,
                             isOffline = isOffline,
                             isLoading = isLoading,
@@ -183,7 +183,6 @@ class MainActivity : ComponentActivity() {
                             onDeleteClick = { viewModel.openDeleteDialog(it) },
                             onAddClick = { viewModel.openAddDialog() },
                             onRefresh = { viewModel.loadResources() },
-                            onSwitchToTeacherDemo = { viewModel.loginDemo(UserRole.DOCENTE) },
                             onOpenApiConfig = { viewModel.openApiConfig() },
                             onOpenInfoDialog = { viewModel.openInfoDialog() },
                             onLogout = { viewModel.logout() }
@@ -263,7 +262,6 @@ fun MainScreenContent(
     onDeleteClick: (com.example.data.model.ResourceItem) -> Unit,
     onAddClick: () -> Unit,
     onRefresh: () -> Unit,
-    onSwitchToTeacherDemo: () -> Unit,
     onOpenApiConfig: () -> Unit,
     onOpenInfoDialog: () -> Unit,
     onLogout: () -> Unit
@@ -285,7 +283,7 @@ fun MainScreenContent(
                                 shape = RoundedCornerShape(10.dp)
                             ) {
                                 Text(
-                                    text = userRole.displayName(),
+                                    text = stringResource(userRole.labelRes),
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onPrimary,
@@ -436,8 +434,7 @@ fun MainScreenContent(
                         isTeacher = isTeacher,
                         onAddClick = onAddClick,
                         onEditClick = onEditClick,
-                        onDeleteClick = onDeleteClick,
-                        onSwitchToTeacherDemo = onSwitchToTeacherDemo
+                        onDeleteClick = onDeleteClick
                     )
                 }
 
