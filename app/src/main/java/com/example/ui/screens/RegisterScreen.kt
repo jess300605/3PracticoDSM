@@ -65,7 +65,7 @@ fun RegisterScreen(
     isLoading: Boolean,
     validationResult: PasswordValidationResult,
     onPasswordChange: (String) -> Unit,
-    onRegisterClick: (String, String, String, UserRole) -> Unit,
+    onRegisterClick: (String, String, String, UserRole, String) -> Unit,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -74,10 +74,12 @@ fun RegisterScreen(
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var selectedRole by remember { mutableStateOf(UserRole.ESTUDIANTE) }
+    var teacherCode by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
     val passwordsMatch = password.isNotEmpty() && password == confirmPassword
-    val canRegister = validationResult.isValid && passwordsMatch && nombre.isNotBlank() && email.isNotBlank() && !isLoading
+    val canRegister = validationResult.isValid && passwordsMatch && nombre.isNotBlank() && email.isNotBlank() &&
+        (selectedRole != UserRole.DOCENTE || teacherCode.isNotBlank()) && !isLoading
 
     Scaffold(
         topBar = {
@@ -173,6 +175,22 @@ fun RegisterScreen(
                     icon = Icons.Filled.School,
                     onClick = { selectedRole = UserRole.DOCENTE },
                     modifier = Modifier.weight(1f)
+                )
+            }
+
+            // Código de acceso: solo se pide al registrarse como Docente
+            if (selectedRole == UserRole.DOCENTE) {
+                Spacer(modifier = Modifier.height(12.dp))
+                OutlinedTextField(
+                    value = teacherCode,
+                    onValueChange = { teacherCode = it },
+                    label = { Text(stringResource(R.string.teacher_code_label)) },
+                    supportingText = { Text(stringResource(R.string.teacher_code_hint)) },
+                    leadingIcon = { Icon(Icons.Filled.School, contentDescription = null) },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("teacher_code_field")
                 )
             }
 
@@ -272,7 +290,7 @@ fun RegisterScreen(
 
             // Botón de Registro
             Button(
-                onClick = { onRegisterClick(nombre, email, password, selectedRole) },
+                onClick = { onRegisterClick(nombre, email, password, selectedRole, teacherCode) },
                 enabled = canRegister,
                 modifier = Modifier
                     .fillMaxWidth()

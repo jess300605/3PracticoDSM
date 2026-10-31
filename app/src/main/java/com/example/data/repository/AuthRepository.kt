@@ -18,6 +18,11 @@ class AuthRepository(private val userDao: UserDao) {
     private val _currentUser = MutableStateFlow<User?>(null)
     val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
 
+    companion object {
+        /** Código que debe ingresar quien se registra como Docente (se documenta en el README). */
+        const val TEACHER_ACCESS_CODE = "UDB-DOCENTE-2026"
+    }
+
     suspend fun initializeDefaultUsers() {
         // Pre-seed demo users if they don't exist
         val studentEmail = "estudiante@udb.edu.sv"
@@ -52,10 +57,16 @@ class AuthRepository(private val userDao: UserDao) {
         nombre: String,
         email: String,
         password: String,
-        role: UserRole
+        role: UserRole,
+        teacherCode: String = ""
     ): Result<User> {
         val trimmedEmail = email.trim().lowercase()
         val trimmedName = nombre.trim()
+
+        // Las cuentas Docente solo se crean con el código de acceso institucional
+        if (role == UserRole.DOCENTE && teacherCode.trim() != TEACHER_ACCESS_CODE) {
+            return Result.failure(LocalizedException(R.string.err_teacher_code_invalid))
+        }
 
         if (trimmedName.isEmpty()) {
             return Result.failure(LocalizedException(R.string.err_name_empty))
@@ -104,19 +115,6 @@ class AuthRepository(private val userDao: UserDao) {
 
     fun logout() {
         _currentUser.value = null
-    }
-
-    suspend fun loginDemo(role: UserRole): User {
-        val email = if (role == UserRole.DOCENTE) "docente@udb.edu.sv" else "estudiante@udb.edu.sv"
-        val user = userDao.getUserByEmail(email)?.toDomain() ?: User(
-            id = if (role == UserRole.DOCENTE) "demo_teacher" else "demo_student",
-            nombre = if (role == UserRole.DOCENTE) "Ing. Roberto Guardado (Docente)" else "Carlos Mendoza (Estudiante)",
-            email = email,
-            passwordHash = "",
-            role = role
-        )
-        _currentUser.value = user
-        return user
     }
 
     private fun hashPassword(password: String): String {
