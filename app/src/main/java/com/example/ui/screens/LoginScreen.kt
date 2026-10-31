@@ -61,13 +61,11 @@ import com.example.data.model.UserRole
 fun LoginScreen(
     isLoading: Boolean,
     onLoginClick: (String, String) -> Unit,
-    onDemoLoginClick: (UserRole) -> Unit,
     onNavigateToRegister: () -> Unit,
-    onShowInfo: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var email by remember { mutableStateOf("docente@udb.edu.sv") }
-    var password by remember { mutableStateOf("Docente2026!@#$") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
     Box(
@@ -231,78 +229,6 @@ fun LoginScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Demo Access Section
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    HorizontalDivider(modifier = Modifier.weight(1f))
-                    Text(
-                        text = stringResource(R.string.demo_divider),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(horizontal = 8.dp)
-                    )
-                    HorizontalDivider(modifier = Modifier.weight(1f))
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    OutlinedButton(
-                        onClick = { onDemoLoginClick(UserRole.DOCENTE) },
-                        modifier = Modifier
-                            .weight(1f)
-                            .testTag("demo_teacher_button")
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.School,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(stringResource(R.string.role_teacher))
-                    }
-
-                    OutlinedButton(
-                        onClick = { onDemoLoginClick(UserRole.ESTUDIANTE) },
-                        modifier = Modifier
-                            .weight(1f)
-                            .testTag("demo_student_button")
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Person,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(stringResource(R.string.role_student))
-                    }
-                }
-            }
-        }
-
-        // Top right Info button
-        IconButton(
-            onClick = onShowInfo,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(16.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Info,
-                contentDescription = stringResource(R.string.cd_info),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
     }
 }

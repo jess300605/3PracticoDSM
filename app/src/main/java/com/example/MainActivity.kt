@@ -60,7 +60,6 @@ import com.example.ui.MainViewModel
 import com.example.ui.screens.ApiSettingsDialog
 import com.example.ui.screens.DeleteConfirmationDialog
 import com.example.ui.screens.FavoritesScreen
-import com.example.ui.screens.InfoDialog
 import com.example.ui.screens.LoginScreen
 import com.example.ui.screens.ProfileScreen
 import com.example.ui.screens.RatingDialog
@@ -101,7 +100,6 @@ class MainActivity : ComponentActivity() {
                 val itemToEdit by viewModel.itemToEdit.collectAsState()
                 val isAddingNew by viewModel.isAddingNew.collectAsState()
                 val showApiConfig by viewModel.showApiConfigDialog.collectAsState()
-                val showInfoDialog by viewModel.showInfoDialog.collectAsState()
 
                 val isTeacher = currentUser?.role == UserRole.DOCENTE
                 val snackbarHostState = remember { SnackbarHostState() }
@@ -121,14 +119,8 @@ class MainActivity : ComponentActivity() {
                             onLoginClick = { email, password ->
                                 viewModel.login(email, password) { _, _ -> }
                             },
-                            onDemoLoginClick = { role ->
-                                viewModel.loginDemo(role)
-                            },
                             onNavigateToRegister = {
                                 viewModel.navigateTo(AppScreen.REGISTER)
-                            },
-                            onShowInfo = {
-                                viewModel.openInfoDialog()
                             }
                         )
                     }
@@ -144,8 +136,8 @@ class MainActivity : ComponentActivity() {
                             isLoading = isLoading,
                             validationResult = validationResult,
                             onPasswordChange = { viewModel.setRegisterPassword(it) },
-                            onRegisterClick = { nombre, email, password, role ->
-                                viewModel.register(nombre, email, password, role) { _, _ -> }
+                            onRegisterClick = { nombre, email, password, role, teacherCode ->
+                                viewModel.register(nombre, email, password, role, teacherCode) { _, _ -> }
                             },
                             onNavigateBack = {
                                 viewModel.navigateTo(AppScreen.LOGIN)
@@ -184,7 +176,6 @@ class MainActivity : ComponentActivity() {
                             onAddClick = { viewModel.openAddDialog() },
                             onRefresh = { viewModel.loadResources() },
                             onOpenApiConfig = { viewModel.openApiConfig() },
-                            onOpenInfoDialog = { viewModel.openInfoDialog() },
                             onLogout = { viewModel.logout() }
                         )
                     }
@@ -226,10 +217,6 @@ class MainActivity : ComponentActivity() {
                         onTestUrl = { viewModel.testApiUrl(it) }
                     )
                 }
-
-                if (showInfoDialog) {
-                    InfoDialog(onDismiss = { viewModel.closeInfoDialog() })
-                }
             }
         }
     }
@@ -263,7 +250,6 @@ fun MainScreenContent(
     onAddClick: () -> Unit,
     onRefresh: () -> Unit,
     onOpenApiConfig: () -> Unit,
-    onOpenInfoDialog: () -> Unit,
     onLogout: () -> Unit
 ) {
     Scaffold(
@@ -306,16 +292,6 @@ fun MainScreenContent(
                         Icon(
                             imageVector = Icons.Filled.Cloud,
                             contentDescription = stringResource(R.string.api_settings_title)
-                        )
-                    }
-
-                    IconButton(
-                        onClick = onOpenInfoDialog,
-                        modifier = Modifier.testTag("top_btn_info")
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Info,
-                            contentDescription = stringResource(R.string.info_dialog_title)
                         )
                     }
 
@@ -449,7 +425,6 @@ fun MainScreenContent(
                         ),
                         apiUrl = apiUrl,
                         onOpenApiConfig = onOpenApiConfig,
-                        onOpenInfoDialog = onOpenInfoDialog,
                         onLogout = onLogout
                     )
                 }
