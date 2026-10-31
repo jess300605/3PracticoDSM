@@ -95,8 +95,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _showApiConfigDialog = MutableStateFlow(false)
     val showApiConfigDialog: StateFlow<Boolean> = _showApiConfigDialog.asStateFlow()
 
-    private val _showInfoDialog = MutableStateFlow(false)
-    val showInfoDialog: StateFlow<Boolean> = _showInfoDialog.asStateFlow()
 
     // Registration password live validation
     private val _registerPassword = MutableStateFlow("")
@@ -227,20 +225,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun loginDemo(role: UserRole) {
+    fun register(nombre: String, email: String, password: String, role: UserRole, teacherCode: String, onResult: (Boolean, String?) -> Unit) {
         viewModelScope.launch {
             _isLoading.value = true
-            authRepository.loginDemo(role)
-            _isLoading.value = false
-            _currentScreen.value = AppScreen.MAIN
-            showSnackbar(str(R.string.snack_logged_in_as, str(role.labelRes)))
-        }
-    }
-
-    fun register(nombre: String, email: String, password: String, role: UserRole, onResult: (Boolean, String?) -> Unit) {
-        viewModelScope.launch {
-            _isLoading.value = true
-            val result = authRepository.register(nombre, email, password, role)
+            val result = authRepository.register(nombre, email, password, role, teacherCode)
             _isLoading.value = false
             if (result.isSuccess) {
                 _currentScreen.value = AppScreen.MAIN
@@ -357,13 +345,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _showApiConfigDialog.value = false
     }
 
-    fun openInfoDialog() {
-        _showInfoDialog.value = true
-    }
 
-    fun closeInfoDialog() {
-        _showInfoDialog.value = false
-    }
 
     fun updateApiUrl(url: String) {
         viewModelScope.launch {

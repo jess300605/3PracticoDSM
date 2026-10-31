@@ -122,7 +122,7 @@
     <!-- API Config & Settings -->
     <string name="api_settings_title">Configuración de API Externa</string>
     <string name="api_url_label">URL Base de MockAPI / Railway</string>
-    <string name="api_url_hint">https://xxxx.mockapi.io/api/</string>
+    <string name="api_url_hint">https://xxxx.mockapi.io/api/v1/recursos</string>
     <string name="btn_test_api">Probar Conexión</string>
     <string name="btn_reset_api">Restaurar URL por Defecto</string>
     <string name="api_test_success">¡Conexión exitosa con la API!</string>
@@ -137,8 +137,6 @@
     <string name="teacher_perms_summary">Permisos: Privilegios de Docente con operaciones CRUD (POST, PUT, DELETE).</string>
 
     <!-- Architecture & Info Dialog -->
-    <string name="info_dialog_title">Acerca de AprendeApp</string>
-    <string name="info_dialog_body">Desarrollado para el Tercer Desafío Práctico DSM en Universidad Don Bosco.\n\n• Arquitectura: MVC / MVVM con Kotlin y Jetpack Compose.\n• Consumo de API REST con Retrofit + OkHttp.\n• Autenticación con roles (Estudiante y Docente).\n• Validación robusta de contraseñas de 12+ caracteres.\n• Persistencia local de Favoritos con Room Database.\n• Sistema de calificación dinámico (1 a 5 estrellas) sincronizado con el backend.</string>
     <string name="btn_close">Cerrar</string>
     <string name="btn_retry">Reintentar</string>
 
@@ -150,7 +148,6 @@
     <string name="cd_refresh">Refrescar</string>
     <string name="cd_hide_password">Ocultar</string>
     <string name="cd_show_password">Mostrar</string>
-    <string name="cd_info">Información</string>
     <string name="cd_back">Regresar</string>
     <string name="cd_clear">Limpiar</string>
     <string name="cd_edit_resource">Editar recurso en API</string>
@@ -164,7 +161,6 @@
     <string name="share_chooser_title">Compartir recurso</string>
 
     <!-- Login -->
-    <string name="demo_divider">O ACCESO DEMO RÁPIDO</string>
 
     <!-- Perfil -->
     <string name="default_user_name">Usuario</string>
@@ -173,9 +169,6 @@
     <string name="profile_api_section">Conexión a API REST</string>
     <string name="profile_current_endpoint">Endpoint actual:</string>
     <string name="btn_configure_api">Configurar MockAPI / Railway</string>
-    <string name="profile_challenge_title">Desafío Práctico DSM</string>
-    <string name="profile_university_line">Universidad Don Bosco • Escuela de Ingeniería en Computación</string>
-    <string name="btn_view_specs">Ver Especificaciones Técnicas</string>
 
     <!-- Favoritos -->
     <string name="favorites_title">Mis Recursos Favoritos</string>
@@ -215,4 +208,9 @@
     <string name="snack_delete_error">No se pudo eliminar en la API. Inténtalo de nuevo.</string>
     <string name="snack_api_url_updated">URL de API actualizada</string>
     <string name="snack_api_url_reset">URL de API restaurada a la predeterminada</string>
+
+    <!-- Registro de docentes -->
+    <string name="teacher_code_label">Código de acceso docente</string>
+    <string name="teacher_code_hint">Solicítalo a la institución para crear una cuenta Docente</string>
+    <string name="err_teacher_code_invalid">El código de acceso docente es incorrecto.</string>
 </resources>

@@ -61,7 +61,7 @@ El proyecto implementa la arquitectura **MVVM (Model - View - ViewModel)** / **M
 - **Roles y Permisos**:
   - 🎓 **Estudiante**: Explora la biblioteca, realiza búsquedas avanzadas, filtra por categoría, guarda en favoritos y califica recursos (1 a 5 estrellas).
   - 👨‍🏫 **Docente**: Acceso total al catálogo y a la **Pantalla Especial de Gestión CRUD** para crear (`POST`), modificar (`PUT`) y eliminar (`DELETE`) recursos en la API externa.
-- **Acceso Demo Rápido**: Botones directos en la pantalla de inicio de sesión para evaluar ambos roles al instante.
+- **Registro de Docentes protegido**: para crear una cuenta con rol Docente se exige un código de acceso institucional (ver sección de credenciales).
 
 ### 2. ⚡ Consumo de API REST Dinámica (CRUD Completo)
 - **Visualización**: Tarjetas informativas con carátula (Coil), título, descripción corta, badge de tipo (#ID) y calificación promedio.
@@ -79,7 +79,7 @@ El proyecto implementa la arquitectura **MVVM (Model - View - ViewModel)** / **M
   - Permite al evaluador ingresar la URL de su propio proyecto de **MockAPI.io** o **Railway** directamente desde la app.
   - Botón para probar la conectividad HTTP en tiempo real con feedback visual.
   - Botón para restaurar la URL por defecto.
-  - Resiliencia offline: Sincronización automática con la base de datos local SQLite (Room) en caso de fallas de conexión.
+  - Caché local (Room): si la API no responde, se muestran en modo lectura los últimos datos descargados. Las operaciones de escritura (POST/PUT/DELETE) requieren conexión y muestran un error si fallan.
 
 ### 3. ⭐ Persistencia de Usuario e Interacción
 - **Lista de Favoritos**:
@@ -99,12 +99,14 @@ El proyecto implementa la arquitectura **MVVM (Model - View - ViewModel)** / **M
 
 ---
 
-## 🔑 Credenciales Demo Pre-configuradas
+## 🔑 Credenciales Pre-configuradas y Código Docente
 
 | Rol | Correo Electrónico | Contraseña | Privilegios |
 | :--- | :--- | :--- | :--- |
 | **Docente** | `docente@udb.edu.sv` | `Docente2026!@#$` | Ver, Buscar, Favoritos, Calificar + **CRUD API (POST/PUT/DELETE)** |
 | **Estudiante** | `estudiante@udb.edu.sv` | `Estudiante2026!@#$` | Ver, Buscar, Favoritos, Calificar |
+
+Para registrar una **nueva cuenta Docente** desde la app, se debe ingresar el código de acceso docente: `UDB-DOCENTE-2026`. Las cuentas Estudiante se registran libremente.
 
 *(También es posible crear nuevas cuentas desde la pantalla de Registro cumpliendo las políticas de seguridad).*
 
