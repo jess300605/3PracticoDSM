@@ -102,7 +102,7 @@ El proyecto implementa la arquitectura **MVVM (Model - View - ViewModel)** / **M
 | :--- | :--- | :--- | :--- |
 | **Docente** | `docente@udb.edu.sv` | `Docente2026!@#$` | Ver, Buscar, Favoritos, Calificar + **CRUD API (POST/PUT/DELETE)** |
 | **Estudiante** | `estudiante@udb.edu.sv` | `Estudiante2026!@#$` | Ver, Buscar, Favoritos, Calificar |
-| **Estudiante** | `SS233210@udb.sv` | `Jes30060526&` | Ver, Buscar, Favoritos, Calificar |
+| **Estudiante** | `SS233210@udb.sv` | `Jess30060526&` | Ver, Buscar, Favoritos, Calificar |
 
 Para registrar una **nueva cuenta Docente** desde la app, se debe ingresar el código de acceso docente: `UDB-DOCENTE-2026`. Las cuentas Estudiante se registran libremente.
 
