@@ -28,11 +28,8 @@ class ResourceRepository(
     private val ratingDao: RatingDao
 ) {
     private val TAG = "ResourceRepository"
-    private val prefs = context.getSharedPreferences("aprende_settings", Context.MODE_PRIVATE)
-
-    private val _apiUrl = MutableStateFlow(
-        prefs.getString("custom_api_url", ApiClient.DEFAULT_API_URL) ?: ApiClient.DEFAULT_API_URL
-    )
+    // La URL de la API es fija (ApiClient.DEFAULT_API_URL)
+    private val _apiUrl = MutableStateFlow(ApiClient.DEFAULT_API_URL)
     val apiUrl: StateFlow<String> = _apiUrl.asStateFlow()
 
     private val _resources = MutableStateFlow<List<ResourceItem>>(emptyList())
@@ -40,29 +37,6 @@ class ResourceRepository(
 
     private val _isOfflineMode = MutableStateFlow(false)
     val isOfflineMode: StateFlow<Boolean> = _isOfflineMode.asStateFlow()
-
-    suspend fun setApiUrl(newUrl: String) {
-        val trimmed = newUrl.trim()
-        _apiUrl.value = trimmed
-        prefs.edit().putString("custom_api_url", trimmed).apply()
-        // Refresh with new URL
-        loadResources(forceRefresh = true)
-    }
-
-    suspend fun resetApiUrl() {
-        setApiUrl(ApiClient.DEFAULT_API_URL)
-    }
-
-    suspend fun testApiConnection(url: String): Boolean = withContext(Dispatchers.IO) {
-        try {
-            val service = ApiClient.getService(url)
-            val response = service.getResources()
-            response.isSuccessful
-        } catch (e: Exception) {
-            Log.w(TAG, "Connection test failed: ${e.message}")
-            false
-        }
-    }
 
     suspend fun loadResources(forceRefresh: Boolean = false): Result<List<ResourceItem>> = withContext(Dispatchers.IO) {
         // Muestra primero la caché local (solo lectura) mientras llega la API

@@ -10,8 +10,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ApiClient {
-    // Default MockAPI endpoint for Recursos
-    const val DEFAULT_API_URL = "https://673f44c7a9bc27832439a2b5.mockapi.io/api/v1/"
+    // URL base de MockAPI (el recurso se llama "recursos"; la app agrega ese nombre)
+    const val DEFAULT_API_URL = "https://6ae521d928393034b08e256b.mockapi.io/api/"
 
     private val moshi: Moshi = Moshi.Builder()
         .addLast(KotlinJsonAdapterFactory())

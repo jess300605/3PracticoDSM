@@ -22,11 +22,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Cloud
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.School
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,6 +41,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -57,7 +59,6 @@ import com.example.data.model.UserRole
 import com.example.ui.AppScreen
 import com.example.ui.MainTab
 import com.example.ui.MainViewModel
-import com.example.ui.screens.ApiSettingsDialog
 import com.example.ui.screens.DeleteConfirmationDialog
 import com.example.ui.screens.FavoritesScreen
 import com.example.ui.screens.LoginScreen
@@ -99,7 +100,7 @@ class MainActivity : ComponentActivity() {
                 val itemToDelete by viewModel.itemToDelete.collectAsState()
                 val itemToEdit by viewModel.itemToEdit.collectAsState()
                 val isAddingNew by viewModel.isAddingNew.collectAsState()
-                val showApiConfig by viewModel.showApiConfigDialog.collectAsState()
+                val authError by viewModel.authError.collectAsState()
 
                 val isTeacher = currentUser?.role == UserRole.DOCENTE
                 val snackbarHostState = remember { SnackbarHostState() }
@@ -154,6 +155,7 @@ class MainActivity : ComponentActivity() {
                             currentTab = currentTab,
                             userRole = currentUser?.role ?: UserRole.ESTUDIANTE,
                             userName = currentUser?.nombre ?: stringResource(R.string.default_user_name),
+                            userEmail = currentUser?.email ?: stringResource(R.string.default_user_email),
                             isTeacher = isTeacher,
                             isOffline = isOffline,
                             isLoading = isLoading,
@@ -175,7 +177,6 @@ class MainActivity : ComponentActivity() {
                             onDeleteClick = { viewModel.openDeleteDialog(it) },
                             onAddClick = { viewModel.openAddDialog() },
                             onRefresh = { viewModel.loadResources() },
-                            onOpenApiConfig = { viewModel.openApiConfig() },
                             onLogout = { viewModel.logout() }
                         )
                     }
@@ -208,13 +209,18 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
-                if (showApiConfig) {
-                    ApiSettingsDialog(
-                        currentUrl = apiUrl,
-                        onDismiss = { viewModel.closeApiConfig() },
-                        onSaveUrl = { viewModel.updateApiUrl(it) },
-                        onResetUrl = { viewModel.resetApiUrl() },
-                        onTestUrl = { viewModel.testApiUrl(it) }
+                // Alerta de errores de inicio de sesión / registro (cuenta existente, contraseña incorrecta, etc.)
+                authError?.let { message ->
+                    AlertDialog(
+                        onDismissRequest = { viewModel.clearAuthError() },
+                        icon = { Icon(Icons.Filled.Warning, contentDescription = null) },
+                        title = { Text(stringResource(R.string.auth_error_title)) },
+                        text = { Text(message) },
+                        confirmButton = {
+                            TextButton(onClick = { viewModel.clearAuthError() }) {
+                                Text(stringResource(R.string.btn_accept))
+                            }
+                        }
                     )
                 }
             }
@@ -228,6 +234,7 @@ fun MainScreenContent(
     currentTab: MainTab,
     userRole: UserRole,
     userName: String,
+    userEmail: String,
     isTeacher: Boolean,
     isOffline: Boolean,
     isLoading: Boolean,
@@ -249,7 +256,6 @@ fun MainScreenContent(
     onDeleteClick: (com.example.data.model.ResourceItem) -> Unit,
     onAddClick: () -> Unit,
     onRefresh: () -> Unit,
-    onOpenApiConfig: () -> Unit,
     onLogout: () -> Unit
 ) {
     Scaffold(
@@ -285,16 +291,6 @@ fun MainScreenContent(
                     }
                 },
                 actions = {
-                    IconButton(
-                        onClick = onOpenApiConfig,
-                        modifier = Modifier.testTag("top_btn_api")
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Cloud,
-                            contentDescription = stringResource(R.string.api_settings_title)
-                        )
-                    }
-
                     IconButton(
                         onClick = onLogout,
                         modifier = Modifier.testTag("top_btn_logout")
@@ -419,12 +415,11 @@ fun MainScreenContent(
                         user = com.example.data.model.User(
                             id = "",
                             nombre = userName,
-                            email = if (isTeacher) "docente@udb.edu.sv" else "estudiante@udb.edu.sv",
+                            email = userEmail,
                             passwordHash = "",
                             role = userRole
                         ),
                         apiUrl = apiUrl,
-                        onOpenApiConfig = onOpenApiConfig,
                         onLogout = onLogout
                     )
                 }

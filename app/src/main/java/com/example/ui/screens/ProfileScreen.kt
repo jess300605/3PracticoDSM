@@ -47,7 +47,6 @@ import com.example.data.model.UserRole
 fun ProfileScreen(
     user: User?,
     apiUrl: String,
-    onOpenApiConfig: () -> Unit,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -187,16 +186,6 @@ fun ProfileScreen(
                     fontWeight = FontWeight.Medium
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
-
-                OutlinedButton(
-                    onClick = onOpenApiConfig,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("btn_open_api_settings")
-                ) {
-                    Text(stringResource(R.string.btn_configure_api))
-                }
             }
         }
 

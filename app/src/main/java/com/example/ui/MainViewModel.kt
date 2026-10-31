@@ -18,7 +18,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -42,6 +46,7 @@ enum class SortOption {
     ID_DESC
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = AppDatabase.getInstance(application)
@@ -92,8 +97,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _isAddingNew = MutableStateFlow(false)
     val isAddingNew: StateFlow<Boolean> = _isAddingNew.asStateFlow()
 
-    private val _showApiConfigDialog = MutableStateFlow(false)
-    val showApiConfigDialog: StateFlow<Boolean> = _showApiConfigDialog.asStateFlow()
+    // Errores de login/registro: se muestran en una alerta (AlertDialog)
+    private val _authError = MutableStateFlow<String?>(null)
+    val authError: StateFlow<String?> = _authError.asStateFlow()
 
 
     // Registration password live validation
@@ -144,17 +150,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             loadResources()
         }
 
-        // Collect current user changes to update favorite listener
+        // Los favoritos siguen SIEMPRE al usuario actual: al cambiar de cuenta se cancela
+        // la escucha anterior y se abre la del nuevo usuario (flatMapLatest).
         viewModelScope.launch {
-            currentUser.collect { user ->
-                if (user != null) {
-                    resourceRepository.getFavoriteIdsFlow(user.id).collect { ids ->
-                        _favoriteIds.value = ids.toSet()
+            currentUser
+                .flatMapLatest { user ->
+                    if (user != null) {
+                        resourceRepository.getFavoriteIdsFlow(user.id).map { it.toSet() }
+                    } else {
+                        flowOf(emptySet())
                     }
-                } else {
-                    _favoriteIds.value = emptySet()
                 }
-            }
+                .collect { ids -> _favoriteIds.value = ids }
         }
     }
 
@@ -219,7 +226,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 onResult(true, null)
             } else {
                 val errorMsg = errorText(result.exceptionOrNull(), R.string.snack_login_error_default)
-                showSnackbar(errorMsg)
+                _authError.value = errorMsg
                 onResult(false, errorMsg)
             }
         }
@@ -236,7 +243,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 onResult(true, null)
             } else {
                 val errorMsg = errorText(result.exceptionOrNull(), R.string.snack_register_error_default)
-                showSnackbar(errorMsg)
+                _authError.value = errorMsg
                 onResult(false, errorMsg)
             }
         }
@@ -336,34 +343,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    // API Config Actions
-    fun openApiConfig() {
-        _showApiConfigDialog.value = true
-    }
-
-    fun closeApiConfig() {
-        _showApiConfigDialog.value = false
-    }
-
-
-
-    fun updateApiUrl(url: String) {
-        viewModelScope.launch {
-            resourceRepository.setApiUrl(url)
-            closeApiConfig()
-            showSnackbar(str(R.string.snack_api_url_updated))
-        }
-    }
-
-    fun resetApiUrl() {
-        viewModelScope.launch {
-            resourceRepository.resetApiUrl()
-            closeApiConfig()
-            showSnackbar(str(R.string.snack_api_url_reset))
-        }
-    }
-
-    suspend fun testApiUrl(url: String): Boolean {
-        return resourceRepository.testApiConnection(url)
+    fun clearAuthError() {
+        _authError.value = null
     }
 }

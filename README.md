@@ -75,11 +75,8 @@ El proyecto implementa la arquitectura **MVVM (Model - View - ViewModel)** / **M
   - ➕ **Crear (`POST`)**: Formulario con validación de campos obligatorios y URL.
   - ✏️ **Modificar (`PUT`)**: Formulario prellenado con datos del recurso a editar.
   - 🗑️ **Eliminar (`DELETE`)**: Diálogo de confirmación antes de eliminar el recurso en el servidor.
-- **Configurador de Endpoint de API en Vivo**:
-  - Permite al evaluador ingresar la URL de su propio proyecto de **MockAPI.io** o **Railway** directamente desde la app.
-  - Botón para probar la conectividad HTTP en tiempo real con feedback visual.
-  - Botón para restaurar la URL por defecto.
-  - Caché local (Room): si la API no responde, se muestran en modo lectura los últimos datos descargados. Las operaciones de escritura (POST/PUT/DELETE) requieren conexión y muestran un error si fallan.
+- **Caché local (Room)**: si la API no responde, se muestran en modo lectura los últimos datos descargados. Las operaciones de escritura (`POST`/`PUT`/`DELETE`) requieren conexión y muestran un error si fallan.
+- **URL de la API**: se define en `ApiClient.DEFAULT_API_URL` (MockAPI, recurso `recursos`).
 
 ### 3. ⭐ Persistencia de Usuario e Interacción
 - **Lista de Favoritos**:
@@ -108,7 +105,7 @@ El proyecto implementa la arquitectura **MVVM (Model - View - ViewModel)** / **M
 
 Para registrar una **nueva cuenta Docente** desde la app, se debe ingresar el código de acceso docente: `UDB-DOCENTE-2026`. Las cuentas Estudiante se registran libremente.
 
-*(También es posible crear nuevas cuentas desde la pantalla de Registro cumpliendo las políticas de seguridad).*
+*(También es posible crear nuevas cuentas desde la pantalla de Registro cumpliendo las políticas de seguridad). Si el correo ya existe, la app muestra una alerta.*
 
 ---
 

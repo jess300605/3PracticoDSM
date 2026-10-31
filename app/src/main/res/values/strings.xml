@@ -120,14 +120,12 @@
     <string name="msg_sync_offline">Mostrando datos locales sincronizados.</string>
 
     <!-- API Config & Settings -->
-    <string name="api_settings_title">Configuración de API Externa</string>
-    <string name="api_url_label">URL Base de MockAPI / Railway</string>
-    <string name="api_url_hint">https://xxxx.mockapi.io/api/v1/recursos</string>
+    <string name="api_settings_title">Configuración de la API REST</string>
+    <string name="api_info_note">Personaliza la URL base de la API REST o realiza pruebas de conectividad.</string>
+    <string name="api_url_label">URL Base de la API</string>
+    <string name="api_url_hint">https://6ae521d928393034b08e256b.mockapi.io/api/</string>
     <string name="btn_test_api">Probar Conexión</string>
     <string name="btn_reset_api">Restaurar URL por Defecto</string>
-    <string name="api_test_success">¡Conexión exitosa con la API!</string>
-    <string name="api_test_failed">No se pudo conectar a la URL. Verifícala.</string>
-    <string name="api_info_note">Puedes cambiar el endpoint para evaluar con tu propio proyecto de MockAPI.io o Railway.</string>
 
     <!-- Profile & User Details -->
     <string name="profile_title">Perfil de Usuario</string>
@@ -137,6 +135,8 @@
     <string name="teacher_perms_summary">Permisos: Privilegios de Docente con operaciones CRUD (POST, PUT, DELETE).</string>
 
     <!-- Architecture & Info Dialog -->
+    <string name="info_dialog_title">Información de la Aplicación</string>
+    <string name="info_dialog_body">AprendeApp - Sistema de Recursos para Ingeniería de Sistemas. Desarrollado para la Universidad Don Bosco (DSM).</string>
     <string name="btn_close">Cerrar</string>
     <string name="btn_retry">Reintentar</string>
 
@@ -168,7 +168,6 @@
     <string name="profile_role_privileges">Privilegios del Rol</string>
     <string name="profile_api_section">Conexión a API REST</string>
     <string name="profile_current_endpoint">Endpoint actual:</string>
-    <string name="btn_configure_api">Configurar MockAPI / Railway</string>
 
     <!-- Favoritos -->
     <string name="favorites_title">Mis Recursos Favoritos</string>
@@ -183,14 +182,14 @@
     <string name="form_error_required">Por favor completa título, descripción y enlace.</string>
 
     <!-- API: resultado corto de la prueba de conexión -->
-    <string name="api_test_ok_short">¡Conexión OK!</string>
-    <string name="api_test_fail_short">Fallo conexión</string>
+    <string name="api_test_ok_short">Conexión Exitosa</string>
+    <string name="api_test_fail_short">Error de Conexión</string>
 
     <!-- Mensajes de error (autenticación y datos) -->
     <string name="err_name_empty">El nombre no puede estar vacío.</string>
     <string name="err_email_invalid">El formato del correo es inválido.</string>
     <string name="err_password_weak">La contraseña no cumple con todos los requisitos de seguridad.</string>
-    <string name="err_email_exists">Ya existe una cuenta registrada con este correo.</string>
+    <string name="err_email_exists">Ya existe una cuenta registrada con este correo. Inicia sesión o usa otro correo.</string>
     <string name="err_user_not_found">Usuario no encontrado con ese correo.</string>
     <string name="err_wrong_password">Contraseña incorrecta.</string>
     <string name="err_resource_not_found">Recurso no encontrado.</string>
@@ -206,11 +205,13 @@
     <string name="snack_rating_error">Error al actualizar la calificación</string>
     <string name="snack_save_error">No se pudo guardar en la API. Revisa tu conexión e inténtalo de nuevo.</string>
     <string name="snack_delete_error">No se pudo eliminar en la API. Inténtalo de nuevo.</string>
-    <string name="snack_api_url_updated">URL de API actualizada</string>
-    <string name="snack_api_url_reset">URL de API restaurada a la predeterminada</string>
 
     <!-- Registro de docentes -->
     <string name="teacher_code_label">Código de acceso docente</string>
     <string name="teacher_code_hint">Solicítalo a la institución para crear una cuenta Docente</string>
     <string name="err_teacher_code_invalid">El código de acceso docente es incorrecto.</string>
+
+    <!-- Alertas de autenticación -->
+    <string name="auth_error_title">No se pudo continuar</string>
+    <string name="btn_accept">Aceptar</string>
 </resources>
